@@ -15,7 +15,7 @@ def rowSplit(rowString):
     return tuple(indexes), value
 
 
-def load_ICM_csr():
+def load_ICM_csr(tuples=False):
     ICM_file = open_file("data_ICM_title_abstract.csv")
     ICM_file.seek(0)
     ICM_indexes = []
