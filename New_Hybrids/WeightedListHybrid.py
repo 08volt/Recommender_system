@@ -4,6 +4,7 @@ import sys
 sys.path.insert(0, '../Lab/')
 import numpy as np
 from Base.BaseRecommender import BaseRecommender
+import operator
 
 from Base.BaseRecommender import BaseRecommender
 class WeightedListHybrid(BaseRecommender):
@@ -29,7 +30,7 @@ class WeightedListHybrid(BaseRecommender):
             final_rec = []
             r = 0
             while(r<cutoff):
-                rec_index = np.argmin(i)
+                rec_index = np.argmin(map(operator.sub, i, self.weights))
                 recommandation = recs[rec_index][i[rec_index]]
                 if not recommandation in final_rec:
                     final_rec.append(recommandation)
