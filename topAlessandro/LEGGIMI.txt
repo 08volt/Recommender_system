@@ -1,0 +1,7 @@
+1a)Probably i notebook che metto qui non andranno,
+	plausibile che chiedera di importare una roba tipo: evaluate_algorithm_with_matrix
+	perchè ho modificato un file (from Notebooks_utils.evaluation_function import evaluate_algorithm_with_matrix)
+1b) il file aggiornato evaluation function è qui dentro STUFF
+	così puoi fare metodi matti, basta che gli passi una matrice fatta come output di kaggle(users x raccomandaz)
+	RICORDA di digli quante raccomandaz vuoi, tipo io gliene do 10 nel mio notebook
+	
