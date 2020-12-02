@@ -11,12 +11,13 @@ class WeightedHybrid(BaseRecommender):
         self.recommenders = recommenders
         self.weights =  [w /sum(weights) for w in weights]
 
-    def recommend(self, user_id_array, cutoff = None, remove_seen_flag=True, items_to_compute = None,
+    def recommend(self, user_id_array,weights=None, cutoff = None, remove_seen_flag=True, items_to_compute = None,
                   remove_top_pop_flag = False, remove_custom_items_flag = False, return_scores = False):
 
         rank = [[] for u in user_id_array]
         scores = [[] for u in user_id_array]
-
+        if weights != None:
+            self.weights = weights
 
 
         for r,w in zip(self.recommenders, self.weights):
