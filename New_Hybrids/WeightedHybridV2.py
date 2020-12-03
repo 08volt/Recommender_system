@@ -65,7 +65,7 @@ class WeightedHybridScoreRecommender(BaseRecommender):
 
     def fit(self, fits, weights):
         print("--------FITTING IN PROGRESS...-------")
-        top.fit()
+        self.top.fit()
 
         for rec, fit in zip(self.recs, fits):
             rec.fit(**fit)
