@@ -9,6 +9,9 @@ from Base.BaseRecommender import BaseRecommender
 from operator import add
 from Base.DataIO import DataIO
 import numpy as np
+from Base.NonPersonalizedRecommender import TopPop
+
+
 
 
 def sumScores(ss):
@@ -52,6 +55,8 @@ class WeightedHybridScoreRecommender(BaseRecommender):
 
         super(WeightedHybridScoreRecommender, self).__init__(URM_train)
         self.recs = []
+        self.top = TopPop(URM_train)
+
 
         self.weights = [1 for rec in recs]
 
@@ -60,6 +65,7 @@ class WeightedHybridScoreRecommender(BaseRecommender):
 
     def fit(self, fits, weights):
         print("--------FITTING IN PROGRESS...-------")
+        top.fit()
 
         for rec, fit in zip(self.recs, fits):
             rec.fit(**fit)
@@ -75,6 +81,13 @@ class WeightedHybridScoreRecommender(BaseRecommender):
             # user_profile_length = self.URM_train[user_id].getnnz(1)
 
             scores = []
+            user_profile_length = URM_train[user_id].getnnz(1)
+    
+            if user_profile_length==0:
+                #cold user top pop
+                item_weights[i]=self.top._compute_item_score_single_user()
+                i += 1
+                continue
 
             for rec in self.recs:
                 scores.append(rec._compute_item_score(int(user_id), items_to_compute))
