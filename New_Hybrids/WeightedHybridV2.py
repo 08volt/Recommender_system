@@ -86,7 +86,7 @@ class WeightedHybridScoreRecommender(BaseRecommender):
     
             if user_profile_length==0:
                 #cold user top pop
-                item_weights[i]=self.top._compute_item_score_single_user()
+                item_weights[i]=self.top._compute_item_score(int(user_id), items_to_compute)
                 i += 1
                 continue
 
