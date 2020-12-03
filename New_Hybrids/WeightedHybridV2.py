@@ -56,6 +56,7 @@ class WeightedHybridScoreRecommender(BaseRecommender):
         super(WeightedHybridScoreRecommender, self).__init__(URM_train)
         self.recs = []
         self.top = TopPop(URM_train)
+        self.URM_train = URM_train
 
 
         self.weights = [1 for rec in recs]
@@ -81,7 +82,7 @@ class WeightedHybridScoreRecommender(BaseRecommender):
             # user_profile_length = self.URM_train[user_id].getnnz(1)
 
             scores = []
-            user_profile_length = URM_train[user_id].getnnz(1)
+            user_profile_length = self.URM_train[user_id].getnnz(1)
     
             if user_profile_length==0:
                 #cold user top pop
