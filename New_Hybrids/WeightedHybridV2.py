@@ -42,8 +42,8 @@ def enablePrint():
     sys.stdout = sys.__stdout__
 
 
-class WeightedHybridScoreRecommender(BaseRecommender):
-    RECOMMENDER_NAME = "WeightedHybridScoreRecommender"
+class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
+    RECOMMENDER_NAME = "WeightedHybridScoreRecommenderV2forBayesianSearch"
 
     # initialization
     # recs = [rec1, rec2, ...]
@@ -53,7 +53,7 @@ class WeightedHybridScoreRecommender(BaseRecommender):
     # }
     def __init__(self, URM_train, recs, inits):
 
-        super(WeightedHybridScoreRecommender, self).__init__(URM_train)
+        super(WeightedHybridScoreRecommenderV2forBayesianSearch, self).__init__(URM_train)
         self.recs = []
         self.top = TopPop(URM_train)
         self.URM_train = URM_train
