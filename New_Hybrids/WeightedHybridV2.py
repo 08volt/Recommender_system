@@ -55,7 +55,7 @@ class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
 
         super(WeightedHybridScoreRecommenderV2forBayesianSearch, self).__init__(URM_train)
         self.recs = []
-        self.top = TopPop(URM_train)
+#         self.top = TopPop(URM_train)
         self.URM_train = URM_train
 
 
@@ -65,18 +65,36 @@ class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
             self.recs.append(rec(**init))
 
     def fit(self, fits, weights):
-        print("--------FITTING IN PROGRESS...-------")
-        self.top.fit()
+        print("--------FITTING START-------")
+#         self.top.fit()
 
         for rec, fit in zip(self.recs, fits):
+            print(f"--------FITTING IN PROGRESS: {rec.RECOMMENDER_NAME}-------")
             rec.fit(**fit)
         self.weights = weights
-        print("------FITTING END, SIAMO GROSSISSIMI ------")
+        print("------FITTING END------")
 
     # qui calcolo score per ogni metodo e sommo e tutte quelle belle cose
     # questa funzione è chiamat dentro reccommend e ritorna lo score degli items
     def _compute_item_score(self, user_id_array, items_to_compute=None):
+        if isinstance(user_id_array, int):
+            scores = []
+            user_id = int(user_id_array)
+            user_profile_length = self.URM_train[user_id].getnnz(1)
+        
+#             if user_profile_length <= 0:
+#                 #cold user top pop
+#                 return self.top._compute_item_score([int(user_id)], items_to_compute)
+                
+
+            for rec in self.recs:
+                scores.append(rec._compute_item_score(int(user_id), items_to_compute))
+
+            return np.array(sumScoresWeights(scores, self.weights))
+
+            
         item_weights = np.zeros((len(user_id_array), self.URM_train.shape[1]), dtype=np.float32)
+        
 
         for i, user_id in enumerate(user_id_array):
             # user_profile_length = self.URM_train[user_id].getnnz(1)
@@ -84,11 +102,11 @@ class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
             scores = []
             user_profile_length = self.URM_train[user_id].getnnz(1)
     
-            if user_profile_length==0:
-                #cold user top pop
-                item_weights[i]=self.top._compute_item_score([int(user_id)], items_to_compute)
-                i += 1
-                continue
+#             if user_profile_length <= 0:
+#                 #cold user top pop
+#                 item_weights[i]=self.top._compute_item_score([int(user_id)], items_to_compute)
+#                 i += 1
+#                 continue
 
             for rec in self.recs:
                 scores.append(rec._compute_item_score(int(user_id), items_to_compute))
