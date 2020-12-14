@@ -77,7 +77,7 @@ class WeightedHybridScoreRecommender(BaseRecommender):
             rec.fit(**fit)
         self.weights = weights
         for rec in self.recs:
-            s = rec._compute_item_score(range(URM_train.shape[0]), range(URM_train.shape[1]))
+            s = rec._compute_item_score(np.array(range(self.URM_train.shape[0])), np.array(range(self.URM_train.shape[1])))
             self.means.append(np.mean(s))
             self.stds.append(np.std(s))
         print("------FITTING END------")
