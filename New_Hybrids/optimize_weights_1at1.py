@@ -69,7 +69,7 @@ def optimize_process(recommender,evaluator_validation, weights,index, trials, l=
     if best_t <= 0.0001:
         trials = np.linspace(0.0001,trials[1], num=5, endpoint=False)
     elif best_t >= 1:
-        trials = np.linspace(1,trials[-2], num=5, endpoint=False)
+        trials = np.linspace(trials[-2],1, num=5, endpoint=False)
     else:
         left =  trials[0]/10 if np.argmax(MAPS) == 0 else trials[np.argmax(MAPS) - 1]
         right = trials[len(MAPS)-1]*1.5 if np.argmax(MAPS) == len(MAPS)-1 else trials[np.argmax(MAPS) + 1]
@@ -84,13 +84,12 @@ def optimize_process(recommender,evaluator_validation, weights,index, trials, l=
 def rinnova(URM_all, inits,split):
     URM_train, URM_validation = split_train_in_two_percentage_global_sample(URM_all, train_percentage = split)
     evaluator_validation = EvaluatorHoldout(URM_validation, cutoff_list=[10])
-
+    first = True
     for i in range(len(inits)):
         inits[i]["URM_train"] = URM_train
         if "S_matrix_target" in inits[i]:
-            first = True
-            if first:
-                first = False
+           
+            if not first:
                 itemknn = {}
                 itemknn["topK"] = 141
                 itemknn["shrink"] = 47
@@ -98,11 +97,12 @@ def rinnova(URM_all, inits,split):
                 iknn.fit(**itemknn)
                 inits[i]["S_matrix_target"] = iknn.W_sparse
             else:
+                first = False
                 iicm = {}
                 iicm["topK"] = 893
                 iicm["shrink"] = 2
                 iicm["normalize"] = True
-                iknn = ItemIcmKNNCFRecommender(URM_train, ICM_all)
+                iknn = ItemIcmKNNCFRecommender(URM_train, inits[i]["ICM"])
                 iknn.fit(**iicm)
                 inits[i]["S_matrix_target"] = iknn.W_sparse
                 
