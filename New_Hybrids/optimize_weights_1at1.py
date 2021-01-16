@@ -69,10 +69,10 @@ def optimize_process(recommender,evaluator_validation, weights,index, trials, l=
     if best_t <= 0.0001:
         trials = np.linspace(0.0001,trials[1], num=5, endpoint=False)
     elif best_t >= 1:
-        trials = np.linspace(trials[-2],1, num=5, endpoint=False)
+        trials = np.linspace(trials[-2],1, num=5, endpoint=True)[1:]
     else:
         left =  trials[0]/10 if np.argmax(MAPS) == 0 else trials[np.argmax(MAPS) - 1]
-        right = trials[len(MAPS)-1]*1.5 if np.argmax(MAPS) == len(MAPS)-1 else trials[np.argmax(MAPS) + 1]
+        right = 2 * trials[len(MAPS)-1] - trials[len(MAPS)-2]  if np.argmax(MAPS) == len(MAPS)-1 else trials[np.argmax(MAPS) + 1]
         left_arr = np.linspace(left, best_t, num=5, endpoint=False)
         right_arr = np.linspace(best_t, right, num=5, endpoint=False)
         trials = np.concatenate((left_arr,right_arr))[1:]

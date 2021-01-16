@@ -46,6 +46,7 @@ class CFW_D_Similarity_Linalg(BaseItemSimilarityMatrixRecommender):
         self.n_items = self.URM_train.shape[1]
         self.n_users = self.URM_train.shape[0]
         self.n_features = self.ICM.shape[1]
+        self.W_sparse = S_matrix_target
 
         self.sparse_weights = True
 

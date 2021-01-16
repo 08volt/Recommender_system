@@ -42,8 +42,8 @@ def enablePrint():
     sys.stdout = sys.__stdout__
 
 
-class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
-    RECOMMENDER_NAME = "WeightedHybridScoreRecommenderV2forBayesianSearch"
+class WeightedHybridScoreRecommender(BaseRecommender):
+    RECOMMENDER_NAME = "WeightedHybridScoreRecommenderV2"
 
     # initialization
     # recs = [rec1, rec2, ...]
@@ -53,7 +53,7 @@ class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
     # }
     def __init__(self, URM_train, recs, inits):
 
-        super(WeightedHybridScoreRecommenderV2forBayesianSearch, self).__init__(URM_train)
+        super(WeightedHybridScoreRecommender, self).__init__(URM_train)
         self.recs = []
 #         self.top = TopPop(URM_train)
         self.URM_train = URM_train
@@ -82,9 +82,9 @@ class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
             user_id = int(user_id_array)
             user_profile_length = self.URM_train[user_id].getnnz(1)
         
-#             if user_profile_length <= 0:
-#                 #cold user top pop
-#                 return self.top._compute_item_score([int(user_id)], items_to_compute)
+            if user_profile_length <= 0:
+                #cold user top pop
+                return self.top._compute_item_score([int(user_id)], items_to_compute)
                 
 
             for rec in self.recs:
@@ -102,11 +102,11 @@ class WeightedHybridScoreRecommenderV2forBayesianSearch(BaseRecommender):
             scores = []
             user_profile_length = self.URM_train[user_id].getnnz(1)
     
-#             if user_profile_length <= 0:
-#                 #cold user top pop
-#                 item_weights[i]=self.top._compute_item_score([int(user_id)], items_to_compute)
-#                 i += 1
-#                 continue
+            if user_profile_length <= 0:
+                #cold user top pop
+                item_weights[i]=self.top._compute_item_score([int(user_id)], items_to_compute)
+                i += 1
+                continue
 
             for rec in self.recs:
                 scores.append(rec._compute_item_score(int(user_id), items_to_compute))
